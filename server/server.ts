@@ -1,8 +1,8 @@
 import * as restify from 'restify'
 import * as mongoose from 'mongoose'
 
-import {environment} from '../common/environment'
-import {Router} from '../common/router'
+import { environment } from '../common/environment'
+import { Router } from '../common/router'
 
 export class Server {
 
@@ -15,9 +15,9 @@ export class Server {
         })
     }
 
-    initRoutes(routers: Router[]): Promise<any>{
+    initRoutes(routers: Router[]): Promise<any> {
 
-        return new Promise((resolve, reject)=>{
+        return new Promise((resolve, reject) => {
             try {
 
                 this.application = restify.createServer({
@@ -27,13 +27,12 @@ export class Server {
 
                 //para restify conseguir obter o resultado dos parametros passado na querystring
                 this.application.use(restify.plugins.queryParser())
+                this.application.use(restify.plugins.bodyParser())
 
                 //routes
-
-                for(let router of routers){
+                for (let router of routers) {
                     router.applyRoutes(this.application)
                 }
-
 
                 //configurar a porta
                 this.application.listen(environment.server.port, () => {
@@ -47,8 +46,8 @@ export class Server {
         })
     }
 
-    bootstrap(routers: Router[] = []): Promise<Server>{
-        return this.initializeDb().then(()=>
-                this.initRoutes(routers).then(()=>this))
+    bootstrap(routers: Router[] = []): Promise<Server> {
+        return this.initializeDb().then(() =>
+            this.initRoutes(routers).then(() => this))
     }
 }

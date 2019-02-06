@@ -19,6 +19,7 @@ class Server {
                 });
                 //para restify conseguir obter o resultado dos parametros passado na querystring
                 this.application.use(restify.plugins.queryParser());
+                this.application.use(restify.plugins.bodyParser());
                 //routes
                 for (let router of routers) {
                     router.applyRoutes(this.application);
