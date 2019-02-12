@@ -24,6 +24,7 @@ class UsersRouter extends Router {
             })
         })
 
+        //verbo post é utilizado para incluir um novo registro
         application.post('users/', (req, resp, next) => {
             let user = new User(req.body)
             user.save().then(user => {
@@ -33,11 +34,12 @@ class UsersRouter extends Router {
             })
         })
 
-        //verbo put é sempre para atualizado todos os dados campos
+        //verbo put é utilizado para atualizar TODOS os campos de um registro
         application.put('users/:id', (req, resp, next) => {
             const options = { overwrite: true }
-            User.update({ _id: req.params.id }, req.body, options)
-                .exec().then(result => {
+
+            User.update({ _id: req.params.id }, req.body, options).exec()
+                .then(result => {
                     if (result.n) {
                         return User.findById(req.params.id)
                     } else {
@@ -48,6 +50,23 @@ class UsersRouter extends Router {
                     return next()
                 })
         })
+
+        //verbo patch é utilizando para atualizar apenas os campos informados do registro
+        application.patch('users/:id', (req, resp, next) => {
+
+            const options = { new : true }
+
+            User.findByIdAndUpdate(req.params.id, req.body, options).then(user => {
+                if (user) {
+                    resp.json(user)
+                    return next()
+                }
+                resp.send(404)
+                return next()
+            })
+
+        })
+
     }
 }
 

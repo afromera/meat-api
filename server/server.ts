@@ -3,6 +3,7 @@ import * as mongoose from 'mongoose'
 
 import { environment } from '../common/environment'
 import { Router } from '../common/router'
+import {mergePatchBodyParser} from './merge-patch.parser'
 
 export class Server {
 
@@ -28,6 +29,7 @@ export class Server {
                 //para restify conseguir obter o resultado dos parametros passado na querystring
                 this.application.use(restify.plugins.queryParser())
                 this.application.use(restify.plugins.bodyParser())
+                this.application.use(mergePatchBodyParser)
 
                 //routes
                 for (let router of routers) {
