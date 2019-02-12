@@ -54,7 +54,7 @@ class UsersRouter extends Router {
         //verbo patch é utilizando para atualizar apenas os campos informados do registro
         application.patch('users/:id', (req, resp, next) => {
 
-            const options = { new : true }
+            const options = { new: true }
 
             User.findByIdAndUpdate(req.params.id, req.body, options).then(user => {
                 if (user) {
@@ -62,6 +62,20 @@ class UsersRouter extends Router {
                     return next()
                 }
                 resp.send(404)
+                return next()
+            })
+
+        })
+
+        //verbo delete é utilizado para remover o registro
+        application.del('users/:id', (req, resp, next) => {
+
+            User.remove({ _id: req.params.id }).exec().then((cmdResult: any) => {
+                if (cmdResult.result.n) {
+                    resp.send(204)
+                } else {
+                    resp.send(404)
+                }
                 return next()
             })
 
