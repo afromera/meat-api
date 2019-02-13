@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const router_1 = require("../common/router");
+const restify_errors_1 = require("restify-errors");
 const users_model_1 = require("./users.model");
 class UsersRouter extends router_1.Router {
     constructor() {
@@ -37,7 +38,7 @@ class UsersRouter extends router_1.Router {
                     return users_model_1.User.findById(req.params.id);
                 }
                 else {
-                    resp.send(404);
+                    throw new restify_errors_1.NotFoundError('Documento não encontrado!');
                 }
             }).then(this.render(resp, next))
                 .catch(next);
